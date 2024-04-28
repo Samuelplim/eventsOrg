@@ -6,12 +6,19 @@ import Image from "next/image";
 import { TextField } from "@/app/components/TextField";
 import { AreaField } from "@/app/components/AreaField";
 import { ButtonPrimary } from "@/app/components/ButtonPrimary";
+import axios from "axios";
+import { GetServerSideProps } from "next";
+import path from "path";
+import fs from "fs/promises";
 
 export default function NewEvent() {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [authorName, setAuthorName] = useState("");
-  const [isPublished, setIsPublished] = useState(false);
+  const [isPublished, setIsPublished] = useState(true);
+  const [eventDate, setEventDate] = useState(Date);
+  const [imageFile, setImageFile] = useState<File>();
+  const [loading, setLoading] = useState(false);
 
   function updateTitle(e: ChangeEvent<HTMLInputElement> | undefined) {
     setTitle(e?.target.value || "");
@@ -21,6 +28,32 @@ export default function NewEvent() {
   }
   function updateAuthorName(e: ChangeEvent<HTMLInputElement> | undefined) {
     setAuthorName(e?.target.value || "");
+  }
+
+  function updateEventDate(e: ChangeEvent<HTMLInputElement> | undefined) {
+    setEventDate(e?.target.value || "");
+  }
+
+  function updateImage(e: ChangeEvent<HTMLInputElement> | undefined) {
+    if (e?.target.files) {
+      const file = e.target.files[0];
+      // setSelectedImage(URL.createObjectURL(file));
+      setImageFile(file);
+    }
+  }
+
+  async function handleUpload() {
+    setLoading(true);
+    try {
+      if (!imageFile) return;
+      const formData = new FormData();
+      formData.append("myImage", imageFile);
+      const { data } = await axios.post("/api/image", formData);
+      console.log(data);
+    } catch (error: any) {
+      console.log(error.response?.data);
+    }
+    setLoading(false);
   }
 
   function onClickSave() {}
@@ -67,22 +100,35 @@ export default function NewEvent() {
             value={authorName}
           />
           <TextField
-            id="authorName"
+            id="eventDate"
             name="Data do evento"
-            onchange={updateAuthorName}
+            onchange={updateEventDate}
             type="date"
-            value={authorName}
           />
           <TextField
-            id="authorName"
+            id="image"
             name="Imagem do evento"
-            onchange={updateAuthorName}
+            onchange={updateImage}
             type="file"
-            value={authorName}
           />
         </div>
-        <ButtonPrimary title="Publicar" onClick={onClickSave} />
+        <ButtonPrimary
+          title="Publicar"
+          onClick={onClickSave}
+          disabled={loading}
+        />
       </form>
     </main>
   );
 }
+
+export const getServerSideProps: GetServerSideProps = async () => {
+  const props = { dirs: [] };
+  try {
+    const dirs = await fs.readdir(path.join(process.cwd(), "/public/images"));
+    props.dirs = dirs as any;
+    return { props };
+  } catch (error) {
+    return { props };
+  }
+};

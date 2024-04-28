@@ -3,7 +3,7 @@ import { ChangeEvent } from "react";
 interface TextFieldProps {
   type: "text" | "date" | "file";
   id: string;
-  value: string;
+  value?: string;
   onchange: (e: ChangeEvent<HTMLInputElement>) => void;
   name: string;
 }
