@@ -1,9 +1,9 @@
 "use client";
 import { useState, useEffect } from "react";
-import { EventProps } from "@/api/Events/Models";
 import Image from "next/image";
-import { indexEvents } from "@/api/Events";
 import Link from "next/link";
+import { EventProps } from "@/app/api/Events/Models";
+import { indexEvents } from "@/app/api/Events";
 
 export const Home = () => {
   const [events, setEvents] = useState<EventProps[]>([]);

@@ -1,4 +1,4 @@
-import { usePrisma } from "../../../prisma/client";
+import { usePrisma } from "../../../../prisma/client";
 import { EventProps } from "./Models";
 
 export async function indexEvents() {
