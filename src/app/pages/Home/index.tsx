@@ -3,15 +3,15 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { EventProps } from "@/app/Models";
-import { indexEvents } from "@/app/api/events";
+import axios from "axios";
 
 export const Home = () => {
   const [events, setEvents] = useState<EventProps[]>([]);
 
   async function getEvents() {
-    const events = await indexEvents();
-    if (events) {
-      setEvents(events);
+    const { data } = await axios.get("/api/images");
+    if (data) {
+      setEvents(data);
     }
   }
   useEffect(() => {
