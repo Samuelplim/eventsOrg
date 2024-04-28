@@ -9,9 +9,13 @@ export const Home = () => {
   const [events, setEvents] = useState<EventProps[]>([]);
 
   async function getEvents() {
-    const { data } = await axios.get("/api/images");
-    if (data) {
-      setEvents(data);
+    try {
+      const { data } = await axios.get("/api/events");
+      if (data) {
+        setEvents(data);
+      }
+    } catch (error) {
+      console.log(error);
     }
   }
   useEffect(() => {
@@ -35,7 +39,6 @@ export const Home = () => {
           />
         </div>
       </div>
-
       <div className="flex gap-6 flex-col">
         <form className="md:w-96 sm:w-full">
           <label
@@ -86,19 +89,30 @@ export const Home = () => {
           </Link>
         </div>
       </div>
-
-      {events.length > 0 ? (
-        events.map((event, i) => (
-          <div key={i}>
-            {" "}
-            <div className="">{event.title}</div>
+      <div className="flex flex-col gap-2 w-[400px]">
+        <p className="size-5">Lista de eventos</p>
+        {events.length > 0 ? (
+          events.map((event, i) => {
+            const date = new Date(event.eventDate);
+            const formatterDate = `${date.getDay()}/${date.getMonth()}/${date.getFullYear()}`;
+            return (
+              <div
+                key={i}
+                className="font-medium w-fit text-gray-900 dark:text-white block p-4 text-sm border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              >
+                {" "}
+                <p className=""> Nome do evento: {event.title}</p>
+                <p>Descrição: {event.content}</p>
+                <p>Data do evento: {formatterDate}</p>
+              </div>
+            );
+          })
+        ) : (
+          <div>
+            <p>Buscando eventos...</p>
           </div>
-        ))
-      ) : (
-        <div>
-          <p>Buscando eventos...</p>
-        </div>
-      )}
+        )}
+      </div>
     </main>
   );
 };

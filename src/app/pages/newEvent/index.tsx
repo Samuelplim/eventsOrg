@@ -56,18 +56,20 @@ export default function NewEvent() {
     setLoading(true);
     try {
       if (eventDate) {
-        /* const newEventId = await creatEvent({
+        const newEventId = await axios.post("/api/events", {
           title,
           content,
           authorName,
           eventDate,
           published: true,
         });
-        if (newEventId) {
+        /* if (newEventId) {
           handleUpload();
-        } */
+        }  */
       }
-    } catch (error) {}
+    } catch (error) {
+      console.error(error);
+    }
     setLoading(false);
   }
 
@@ -127,7 +129,7 @@ export default function NewEvent() {
         </div>
         <ButtonPrimary
           title="Publicar"
-          onClick={onClickSave}
+          onClick={() => onClickSave()}
           disabled={loading}
         />
       </form>

@@ -16,7 +16,7 @@ export const TextField = ({
   name,
 }: TextFieldProps) => {
   return (
-    <form className="md:w-96 sm:w-full">
+    <div className="md:w-96 sm:w-full">
       <label
         form={id}
         className="mb-2 xl:text-sm  md:text-xs font-medium text-gray-900 dark:text-white"
@@ -34,6 +34,6 @@ export const TextField = ({
           value={value}
         />
       </div>
-    </form>
+    </div>
   );
 };

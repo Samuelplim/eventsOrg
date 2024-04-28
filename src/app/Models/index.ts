@@ -6,7 +6,7 @@ export interface EventProps {
   content: string | null;
   published: boolean;
   authorName: string;
-  eventDate: Date;
+  eventDate: string;
   image: string | null;
 }
 
@@ -15,5 +15,5 @@ export interface EventPostProps {
   authorName: string;
   content: string;
   published: boolean;
-  eventDate: Date;
+  eventDate: string;
 }
