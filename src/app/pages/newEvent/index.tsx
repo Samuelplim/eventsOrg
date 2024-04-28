@@ -1,7 +1,7 @@
 "use client";
-import { useState, useEffect, ChangeEvent } from "react";
+import { useState, ChangeEvent } from "react";
 
-import Link from "next/link";
+import { readdir } from "fs/promises";
 import Image from "next/image";
 import { TextField } from "@/app/components/TextField";
 import { AreaField } from "@/app/components/AreaField";
@@ -9,14 +9,12 @@ import { ButtonPrimary } from "@/app/components/ButtonPrimary";
 import axios from "axios";
 import { GetServerSideProps } from "next";
 import path from "path";
-import fs from "fs/promises";
 
 export default function NewEvent() {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [authorName, setAuthorName] = useState("");
-  const [isPublished, setIsPublished] = useState(true);
-  const [eventDate, setEventDate] = useState(Date);
+  const [eventDate, setEventDate] = useState<Date>();
   const [imageFile, setImageFile] = useState<File>();
   const [loading, setLoading] = useState(false);
 
@@ -31,32 +29,47 @@ export default function NewEvent() {
   }
 
   function updateEventDate(e: ChangeEvent<HTMLInputElement> | undefined) {
-    setEventDate(e?.target.value || "");
+    const newDate = new Date(e?.target.value || "");
+    setEventDate(newDate);
   }
 
   function updateImage(e: ChangeEvent<HTMLInputElement> | undefined) {
     if (e?.target.files) {
       const file = e.target.files[0];
-      // setSelectedImage(URL.createObjectURL(file));
       setImageFile(file);
     }
   }
 
   async function handleUpload() {
-    setLoading(true);
     try {
       if (!imageFile) return;
       const formData = new FormData();
       formData.append("myImage", imageFile);
-      const { data } = await axios.post("/api/image", formData);
+      const { data } = await axios.post("/api/images", formData);
       console.log(data);
     } catch (error: any) {
       console.log(error.response?.data);
     }
-    setLoading(false);
   }
 
-  function onClickSave() {}
+  async function onClickSave() {
+    setLoading(true);
+    try {
+      if (eventDate) {
+        /* const newEventId = await creatEvent({
+          title,
+          content,
+          authorName,
+          eventDate,
+          published: true,
+        });
+        if (newEventId) {
+          handleUpload();
+        } */
+      }
+    } catch (error) {}
+    setLoading(false);
+  }
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
@@ -122,10 +135,15 @@ export default function NewEvent() {
   );
 }
 
+export async function getStaticProps() {
+  readdir;
+  return { props: {} };
+}
+
 export const getServerSideProps: GetServerSideProps = async () => {
   const props = { dirs: [] };
   try {
-    const dirs = await fs.readdir(path.join(process.cwd(), "/public/images"));
+    const dirs = await readdir(path.join(process.cwd(), "/public/images"));
     props.dirs = dirs as any;
     return { props };
   } catch (error) {
