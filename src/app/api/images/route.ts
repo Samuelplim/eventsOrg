@@ -1,21 +1,21 @@
 import { prisma } from "../../../../prisma/client";
 import handler from "@/app/utils/images";
-import { NextApiRequest } from "next";
+import { NextRequest } from "next/server";
 
 export async function POST(
-  request: NextApiRequest,
+  request: NextRequest,
   { params }: { params: { id: number } }
 ) {
   const id = params.id;
 
   try {
-    const image = await handler(request);
-    console.log("", image);
+    /* const image = await handler(request); */
+
     /* const res = await usePrisma.event.update({
       where: { id: id },
       data: { image },
     }); */
-    return Response.json(image, { status: 201 });
+    return Response.json(id, { status: 201 });
   } catch (error) {
     console.error({ error });
   }
