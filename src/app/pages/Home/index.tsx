@@ -18,6 +18,17 @@ export const Home = () => {
       console.log(error);
     }
   }
+
+  function truncateText(text: string, maxLength: number) {
+    if (text.length <= maxLength) {
+      return text; // Text is shorter than or equal to the maximum length, no need to truncate
+    } else {
+      // Truncate the text and append "..."
+      const truncatedText = text.substring(0, maxLength - 1) + "...";
+      return truncatedText;
+    }
+  }
+
   useEffect(() => {
     getEvents();
   }, []);
@@ -93,7 +104,7 @@ export const Home = () => {
         <p className="size-5">Lista de eventos</p>
         {events.length > 0 ? (
           events.map((event, i) => {
-            const date = new Date(event.eventDate);
+            const date = new Date();
             const formatterDate = `${date.getDay()}/${date.getMonth()}/${date.getFullYear()}`;
             return (
               <div
@@ -101,9 +112,25 @@ export const Home = () => {
                 className="font-medium w-fit text-gray-900 dark:text-white block p-4 text-sm border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500"
               >
                 {" "}
-                <p className=""> Nome do evento: {event.title}</p>
-                <p>Descrição: {event.content}</p>
-                <p>Data do evento: {formatterDate}</p>
+                <p className="">
+                  {" "}
+                  <span className="font-bold">Nome do evento:</span>{" "}
+                  {event.title}
+                </p>
+                <p>
+                  <span className="font-bold">Descrição:</span>{" "}
+                  {truncateText(event.content || "", 300)}
+                </p>
+                <p>
+                  {" "}
+                  <span className="font-bold">Data do evento:</span>{" "}
+                  {formatterDate}
+                </p>
+                <p>
+                  {" "}
+                  <span className="font-bold">Autor do post:</span>{" "}
+                  {event.authorName}
+                </p>
               </div>
             );
           })

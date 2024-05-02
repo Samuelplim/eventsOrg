@@ -4,11 +4,13 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "prisma migrate dev --name init && next build",
+    "build": "next build",
     "start": "next start",
     "lint": "next lint",
     "postinstall": "prisma generate",
-    "prisma:dev": "prisma migrate dev --name init"
+    "prisma:init": "prisma migrate dev --name init",
+    "prisma:create": "prisma migrate dev --create-only",
+    "prisma:dev": "prisma migrate dev"
   },
   "dependencies": {
     "@prisma/client": "^5.13.0",
