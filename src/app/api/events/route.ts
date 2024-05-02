@@ -30,7 +30,7 @@ export async function POST(request: NextRequest) {
         data: {
           ...event,
           categories: {
-            create: event.categories,
+            create: [...event.categories],
           },
         },
       });
