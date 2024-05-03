@@ -5,7 +5,6 @@
 /.pnp
 .pnp.js
 .yarn/install-state.gz
-yarn.lock
 
 # testing
 /coverage
@@ -13,9 +12,6 @@ yarn.lock
 # next.js
 /.next/
 /out/
-
-/prisma/generated/
-/prisma/migrations/
 
 # production
 /build
@@ -30,7 +26,6 @@ yarn-debug.log*
 yarn-error.log*
 
 # local env files
-.env
 .env*.local
 
 # vercel
@@ -39,6 +34,3 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
-
-
-.vercel
